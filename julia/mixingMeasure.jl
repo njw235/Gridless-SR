@@ -7,7 +7,6 @@ using LinearAlgebra
 using LinearSolve
 using Plots
 using StatsBase
-using Divergences
 
 
 transform = function(x,i)
