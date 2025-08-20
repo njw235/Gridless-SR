@@ -27,6 +27,6 @@ R"diff = L2diff_L2Moment(y, supp, w)"
 
 @rget diff
 
-print("The estimated support is: ", supp, " The estimated weights are: ", w)
-print("The true support is: ", atom, " The true weight is: ", weight)
-print("The loss function value for our estimator is: ", diff)
+println("The estimated support is: ", supp, " The estimated weights are: ", w)
+println("The true support is: ", atom, " The true weight is: ", weight)
+println("The loss function value for our estimator is: ", diff)
