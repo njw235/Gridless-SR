@@ -1,2 +1,3 @@
-# Gridless-SR
-Implements a Gridless version of the support reduction algorithm for fitting of finitely supported moment sequences. 
+# SupportReduction
+
+This code implements a gridless version of the support reduction algorithm.
