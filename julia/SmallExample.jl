@@ -24,4 +24,5 @@ w= m[2]
 R"diff = L2diff_L2Moment(y, supp, w)"
 
 @rget diff
+print(supp, w)
 print(diff)
