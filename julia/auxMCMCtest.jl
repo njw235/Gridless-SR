@@ -31,7 +31,7 @@ for i in 1:8
 
 end
 
-#= for i in 1:5
+for i in 1:5
     @rput i
     R"r = autocov(ch_mh$x[,i])"
     R"dhat = tune_delta(ch_mh$x[,i],5)$delta*0.8"
@@ -52,7 +52,7 @@ end
     errormhP[i,1] = err2
     errormhP[i,2] = err3
 end
-=#
+
 
 #println(errormhP)
 println(errorbP)
