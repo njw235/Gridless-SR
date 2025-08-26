@@ -19,7 +19,7 @@ $ julia
 
 # File Content
 
-This project consists of both R and julia files
+This project consists of raw julia files and Pluto Notebooks.
 
 Julia files:
 
@@ -31,11 +31,31 @@ Julia files:
 6. Testmomentls.jl: This file contains the empirical testing for the AR(1) example in section 5.3.
 7. SmallExample.jl: This file contains a small example showing the fitting of a moment sequence that is easily runnable as opposed to the longer run times of the other files.
 
+Pluto Notebooks:
+
+1. AutocovariancePlot.jl: This file contains a runnable pluto notebook to reproduce the autocovariance plots.
+2. pmfplots.jl: This file contains a runnable pluto notebook to reproduce the pmf error plots.
+3. RunnableExample.jl: This file contains a small runnable example from SmallExample.jl but in the form of a pluto notebook for ease of readibility.
+
 # Running a given file
 
-Once you have activated the project environment and have the required dependencies from the file, you can run any of the given files from the command line:
+Once you have activated the project environment and have the required dependencies from the file, you can run any of the given julia files from the command line:
 
 ```
 $julia julia/filename.jl
 ```
+
+## Running a pluto notebook
+
+To run the pluto notebooks execute the following code:
+
+```
+>using Pkg
+>Pkg.add("Pluto")
+>using Pluto
+>Pluto.run()
+```
+
+This will open a notebook environment. From there, go to the "Open a notebook" path and input the filepath in which you have the local version of the pluto notebook you wish to run.
+From there, just run each cell individually and see the output. 
 
