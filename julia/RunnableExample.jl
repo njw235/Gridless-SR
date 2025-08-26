@@ -42,6 +42,37 @@ end
 # ╔═╡ e17e9ed3-e6ac-402c-8937-5378c32d6dfb
 m = momentLSmod(y, dhat, [0.0],[0.0], 1e-8)
 
+# ╔═╡ 08eb6a67-219b-4f52-b2ac-6ca9854731e1
+@rput y
+
+# ╔═╡ 02b7bb46-62c8-42eb-89e6-0560287e8b56
+begin
+	supp = m[1]
+	w= m[2]
+	pop!(supp)
+	pop!(w)
+	@rput supp
+	@rput w
+end
+
+# ╔═╡ 5a62d9f7-a35e-4171-ba5c-2fb9ea5e8e70
+# Computes the value of the loss function
+# Pushed this into R for convenience
+R"diff = L2diff_L2Moment(y, supp, w)"
+
+# ╔═╡ ea49df8a-6ee0-4ab1-acb5-51e74c11d478
+@rget diff
+
+# ╔═╡ b80709c7-6d59-4991-805a-f71c6c8e5a65
+begin
+println("The estimated support is: ", supp, " The estimated weights are: ", w)
+println("The true support is: ", atom, " The true weight is: ", weight)
+println("The loss function value for our estimator is: ", diff)
+end
+
+# ╔═╡ 4094cb71-b46e-4915-b18d-d4684e4d7b6f
+
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
@@ -2126,5 +2157,11 @@ version = "1.9.2+0"
 # ╠═2d4767c4-3d79-4935-85b8-19f349936e3f
 # ╠═35d748a0-65bb-4edf-a334-396b05245cfa
 # ╠═e17e9ed3-e6ac-402c-8937-5378c32d6dfb
+# ╠═08eb6a67-219b-4f52-b2ac-6ca9854731e1
+# ╠═02b7bb46-62c8-42eb-89e6-0560287e8b56
+# ╠═5a62d9f7-a35e-4171-ba5c-2fb9ea5e8e70
+# ╠═ea49df8a-6ee0-4ab1-acb5-51e74c11d478
+# ╠═b80709c7-6d59-4991-805a-f71c6c8e5a65
+# ╠═4094cb71-b46e-4915-b18d-d4684e4d7b6f
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

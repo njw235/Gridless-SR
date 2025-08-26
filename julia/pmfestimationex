@@ -52,9 +52,9 @@ errordict = Dict()
 Random.seed!(1234);
 
 for N in [50,100,500,1000,5000,10000]
-    errors = zeros(2,10)
-    werrors = zeros(2,10)
-    for j in 1:10
+    errors = zeros(2,20)
+    werrors = zeros(2,20)
+    for j in 1:20
         for i in 1:2
 
             p = sim_data(N,i)
@@ -64,8 +64,6 @@ for N in [50,100,500,1000,5000,10000]
                 d = 0.4
             elseif(i == 2)
                 d = 0.1
-            else
-                d = 0.0002
             end
 
             supp = [0.1]
