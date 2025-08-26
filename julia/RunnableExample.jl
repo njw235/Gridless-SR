@@ -24,6 +24,8 @@ include("momentLS.jl")
 R"library(momentLS)"
 
 # ╔═╡ 2d4767c4-3d79-4935-85b8-19f349936e3f
+# We generate the atom and corresponding weight for our moment sequence
+# This example will simply consider a supporting measure with one atom
 begin
 	Random.seed!(1234)
 	atom = rand(Uniform(0,.9))
@@ -31,6 +33,7 @@ begin
 end
 
 # ╔═╡ 35d748a0-65bb-4edf-a334-396b05245cfa
+# We generate the moment sequence induced by our supporting measure
 begin
 	n = 100
 
@@ -40,6 +43,7 @@ begin
 end
 
 # ╔═╡ e17e9ed3-e6ac-402c-8937-5378c32d6dfb
+#Compute the estimator with the support reduction algorithm
 m = momentLSmod(y, dhat, [0.0],[0.0], 1e-8)
 
 # ╔═╡ 08eb6a67-219b-4f52-b2ac-6ca9854731e1
