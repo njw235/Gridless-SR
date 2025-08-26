@@ -1,4 +1,4 @@
-interval = seq(0,1,10^{-5})
+interval = seq(0,1,10^{-3})
 
 #--------------------------------------------------------------
 #This function empirical distribution based on 
@@ -67,7 +67,7 @@ DirDeriv = function(alpha, x, S, C){
   
 }
 
-}
+
 
 
 ##########We need to find the minimum in "\alpha"  of the directional derivative
