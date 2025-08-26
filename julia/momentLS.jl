@@ -150,7 +150,7 @@ momentLS = function(a, b, r, tol)
 		
 		v = moment_matrix(model[:c])
 		
-		pt = atomic_measure(v, FixedRank(1))
+		pt = atomic_measure(v,1e-4)
 		print(pt)
 		
 		if(length(pt.atoms[1].center) == 1)
