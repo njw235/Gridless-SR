@@ -19,9 +19,7 @@ end
 #Initialize the 5 random correlations for plot headers and sample sizes
 begin
 	rho = [-0.727832 , -0.467952 , 0.441529 , 0.837897]
-	N = 6 .^[2:1:5;]
-	rho
-	
+	N = 6 .^[2:1:5;]	
 end
 
 # ╔═╡ 99dd4cb2-bdb5-4315-b220-33b559cfafd7
