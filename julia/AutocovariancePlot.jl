@@ -34,9 +34,11 @@ end
 # ╔═╡ f9d4d530-8f31-43e5-a373-8a164b4a98e9
 begin
 	plot(N, [d11 d21 d31], ribbon = [v11 v21 v31], label = [501 101 51], xaxis=:log, dpi = 500)
+	plot!(N, [d11 d21 d31], dpi = 500, xscale =:log10, legend = false, seriestype =:scatter, seriescolor =:black)
 	title!(L"$\rho = %$rh1$")
 	ylabel!(L"Difference in $\ell_2$ error")
 	xlabel!("Sample Size")
+
 end
 
 # ╔═╡ 92b19bca-58d9-4e7f-9270-8b645258bd06
@@ -51,6 +53,7 @@ end
 # ╔═╡ be0cb98c-0dec-4da1-932f-742f57998bd1
 begin
 	plot(N, [d12 d22 d32], ribbon = [v12 v22 v32], label = [501 101 51], xaxis=:log, dpi = 500)
+	plot!(N, [d12 d22 d32], dpi = 500, xscale =:log10, legend = false, seriestype =:scatter, seriescolor =:black)
 	title!(L"$\rho = %$rh2$")
 	ylabel!(L"Difference in $\ell_2$ error")
 	xlabel!("Sample Size")
@@ -68,6 +71,7 @@ end
 # ╔═╡ 644d1007-b315-44e4-a3f9-24671c119cd8
 begin
 	plot(N, [d13 d23 d33], ribbon = [v13 v23 v33], label = [501 101 51], xaxis=:log, dpi = 500)
+	plot!(N, [d13 d23 d33], dpi = 500, xscale =:log10, legend = false, seriestype =:scatter, seriescolor =:black)
 	title!(L"$\rho = %$rh3$")
 	ylabel!(L"Difference in $\ell_2$ error")
 	xlabel!("Sample Size")
@@ -86,6 +90,7 @@ end
 # ╔═╡ e40c0350-6ec8-4e86-ac9b-5ec4923262d5
 begin
 	plot(N, [d14 d24 d34], ribbon = [v14 v24 v34], label = [501 101 51], xaxis=:log, dpi = 500)
+	plot!(N, [d14 d24 d34], dpi = 500, xscale =:log10, legend = false, seriestype =:scatter, seriescolor =:black)
 	title!(L"$\rho = %$rh4$")
 	ylabel!(L"Difference in $\ell_2$ error")
 	xlabel!("Sample Size")
