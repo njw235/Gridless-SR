@@ -52,7 +52,7 @@ grad_optimize = function(r,p, supp, weight,delta)
 		optimize!(model)
 			
 		v = moment_matrix(model[:c])
-		pt = atomic_measure(v, 1e-4)
+		pt = atomic_measure(v, 1e-3)
 		if(typeof(pt) != Nothing)
 			if(length(pt.atoms[1].center) == 1)
 				supports[ind[1]] = transform(pt.atoms[1].center[1],ind[2])
