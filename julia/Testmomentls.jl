@@ -10,7 +10,11 @@ error3 = zeros(4,10)
 
 R"set.seed(9999)"
 R"rho = c(runif(1, -0.9, -0.7), runif(1, -0.6, -0.4), runif(1, -0.2, 0.2), runif(1, 0.4, 0.6), runif(1, 0.7, 0.9))"
-i = ARGS[1]
+if(ARGS[1] != 4)
+    i = ARGS[1]
+else
+    i = 5
+end
 @rput i
 R"rh = rho[as.integer(i)]"
 for N in 2:5
