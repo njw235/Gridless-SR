@@ -65,8 +65,12 @@ v2 = var(ep2, dims = 2)
 v3 = var(ep3, dims = 2)
 
 open(string("MCMCout",ARGS[1],".txt"), "w") do io
-    println(io, d1,d2,d3)
-    println(io, v1,v2,v3)
+    println(io, d1)
+    println(io, d2)
+    println(io,d3)
+    println(io, v1)
+    println(io, v2)
+    println(io,v3)
 end
 #N = 6 .^[2:1:5;]
 #plot(N, [d1 d2 d3], yerr = [v1 v2 v3], label = [501 101 51], xaxis=:log)
