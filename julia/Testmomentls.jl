@@ -64,12 +64,16 @@ v1 = var(ep1, dims = 2)
 v2 = var(ep2, dims = 2)
 v3 = var(ep3, dims = 2)
 
-N = 6 .^[2:1:5;]
-plot(N, [d1 d2 d3], yerr = [v1 v2 v3], label = [501 101 51], xaxis=:log)
-title!(L"$\rho = %$rh$")
-ylabel!(L"Difference in $\ell_2$ error")
-xlabel!(L"Sample Size")
+open("MCMCout.txt", "w") do io
+    println(io, d1,d2,d3)
+    println(io, v1,v2,v3)
+end
+#N = 6 .^[2:1:5;]
+#plot(N, [d1 d2 d3], yerr = [v1 v2 v3], label = [501 101 51], xaxis=:log)
+#title!(L"$\rho = %$rh$")
+#ylabel!(L"Difference in $\ell_2$ error")
+#xlabel!(L"Sample Size")
 
-savefig(string("plot", ARGS[1], ".png"))
+#savefig(string("plot", ARGS[1], ".png"))
 
 

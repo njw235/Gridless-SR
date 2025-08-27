@@ -304,4 +304,7 @@ for N in [50,100,500,1000,5000,10000]
 	end
 	
 	print(errordict)
+
+open("gridpmf.txt", "w") do io
+  print(io, errordict)
 end
