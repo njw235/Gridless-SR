@@ -64,7 +64,7 @@ v1 = var(ep1, dims = 2)
 v2 = var(ep2, dims = 2)
 v3 = var(ep3, dims = 2)
 
-open("MCMCout.txt", "w") do io
+open(string("MCMCout",ARGS[1],".txt"), "w") do io
     println(io, d1,d2,d3)
     println(io, v1,v2,v3)
 end
