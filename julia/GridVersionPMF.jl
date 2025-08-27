@@ -268,8 +268,6 @@ for N in [50,100,500,1000,5000,10000]
 	                d = 0.4
 	            elseif(i == 2)
 	                d = 0.1
-	            else
-	                d = 0.0002
 	            end
 	
 	            supp = [0.1]
@@ -302,7 +300,8 @@ for N in [50,100,500,1000,5000,10000]
 	    errordict[N] = errorlist 
 	
 	end
-	
+end	
+
 	print(errordict)
 
 open("gridpmf.txt", "w") do io
