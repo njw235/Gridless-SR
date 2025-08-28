@@ -19,7 +19,11 @@ $ julia
 
 # File Content
 
-This project consists of raw julia files and Pluto Notebooks.
+This project consists of R files, raw julia files, and Pluto Notebooks.
+
+R files:
+
+1. timecomparison.R - This file contains the implementation for comparing the runtime and performance of the grid version of the support reduction algorithm for AR(1) chains with and without the low-degree polynomial approximation
 
 Julia files:
 
