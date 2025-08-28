@@ -43,6 +43,8 @@ Pluto Notebooks:
 
 # Running a given file
 
+## Running a julia file
+
 Once you have activated the project environment and have the required dependencies from the file, you can run any of the given julia files from the command line:
 
 ```
