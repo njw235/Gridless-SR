@@ -15,7 +15,7 @@ R"rh = rho[as.integer(i)]"
 N = 1000
 for j in 1:10
     @rput N
-    R"x = generateChain(list(type  = 'AR', rho = rh, M = 6^N))$x"
+    R"x = generateChain(list(type  = 'AR', rho = rh, M = N))$x"
 	R"r = autocov(x)"
     R"dhat = tune_delta(x,5)$delta*0.8"
     @rget r
