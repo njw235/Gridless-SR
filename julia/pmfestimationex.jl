@@ -61,6 +61,8 @@ for j in 1:50
         d = 0.4
     elseif(i == 2)
         d = 0.1
+    else
+        d = 0.001
     end
     supp = [0.1]
     weight = [0.5]
@@ -72,11 +74,11 @@ for j in 1:50
     end        
      x = [0:1:10000;]
     if(i == 1)
-            errors[i,j] = sum((pmf.(x) .- pmft1.(x)).^2)               
+            errors[j] = sum((pmf.(x) .- pmft1.(x)).^2)               
     elseif(i == 2)
-            errors[i,j] = sum((pmf.(x) .- pmft2.(x)).^2)               
+            errors[j] = sum((pmf.(x) .- pmft2.(x)).^2)               
     else
-            errors[i,j] = sum((pmf.(x) .- pmft3.(x)).^2)                
+            errors[j] = sum((pmf.(x) .- pmft3.(x)).^2)                
     end
 end
 
@@ -86,6 +88,6 @@ end
 
 
 
-open("gridlesspmf.txt", "w") do io
+open(string("gridlesspmf",ARGS[1], ".txt", "w") do io
     print(io, errors)
 end
