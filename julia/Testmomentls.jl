@@ -1,5 +1,4 @@
 include("momentLS.jl")
-using LaTeXStrings
 R"library(momentLS)"
 
 errorps = zeros(50)
