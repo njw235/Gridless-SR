@@ -213,7 +213,11 @@ end
 estimate_poly = function(i,r)
 	m = Int(ceil(exp(1+1/exp(1))*log(10^12)))
 	t = Int(floor(2^abs(i) * log(10^12)))
+	if i > length(r):
+		a0 = 1-1/length(r)
+	else
 		a0 = (1- 2.0^-abs(i))
+	end
 	up = min(m-1,t)
 
 	b = zeros(up)
