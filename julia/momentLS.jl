@@ -254,7 +254,7 @@ momentLSmod = function(r, delta,supp, weight, tol, graph = false)
 	exponents = [0:1:n-1;]
 	conv = false
 	count = 0
-	while(count < 25 && !conv)
+	while(count < 100 && !conv)
 		SRstep = SR(supp, weight,r)
 		supp = SRstep[1]
 		weight = SRstep[2]
