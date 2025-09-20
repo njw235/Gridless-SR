@@ -1,15 +1,41 @@
-using Random
-import Clarabel
-using SumOfSquares
-using DynamicPolynomials
-using Plots
+include("momentLS.jl")
+
+solve_LDA = function(f,g)
+    optim = zeros(26)
+    id = append!([1:1:13;], [-13:1:-1;])
+	p = Dict(id .=> [estimate_poly(i,f) for i = append!([1:1:13;],[-13:1:-1;])])
+    time = 0
+    i = 1
+    for(ind in id)
+        model = SOSModel(Clarabel.Optimizer)
+        set_string_names_on_creation(model, false)
+		@polyvar x
+		fx = sum(p[ind][1] .* transform(x, ind) .^[0:1:(length(p[ind])-1);])
+        gx = sum(g .* transform(x,ind) .^ [0,1:4;])
+
+        S = @set x >= 0 && 1-x >= 0
+
+        @variable(model,s)
+			
+		@constraint(model,c, fx >= s*gx, domain = S)
+		@objective(model, Max, s)
+		set_silent(model)
+		optimize!(model)
+        time += solve_time(model)
+        optim[i] = objective_value(model)
+    end
+    min = findmin(optim)[1]
+    return(time, min)
+end
 
 times = zeros(length(10:25:250;))
 for i in [10:25:250;]
 
     @polyvar x
-    f = sum(rand(i) .* x.^[1:1:i;])
-    g = sum(rand(5) .* x.^[0:1:4;])
+    f_c = rand(i)
+    g_c = rand(5)
+    f = sum(f_c .* x.^[1:1:i;])
+    g = sum(g_c .* x.^[0:1:4;])
     S = @set x>=0 && x <= 1
     model = SOSModel(Clarabel.Optimizer)
     @variable(model, s)
