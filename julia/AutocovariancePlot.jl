@@ -16,43 +16,36 @@ begin
 end
 
 # ╔═╡ 251a5952-8dea-4448-84f6-81bc9b02ea41
-#Initialize the 5 random correlations for plot headers and sample sizes
+#Initialize the 4 random correlations for plot headers and sample sizes
 begin
 	rho = [-0.727832 , -0.467952 , 0.441529 , 0.837897]
-	N = 6 .^[2:1:5;]
-	rho
-	
+	N = 6 .^[2:1:5;]	
 end
 
 # ╔═╡ 99dd4cb2-bdb5-4315-b220-33b559cfafd7
 #Load in simulation data output in terms of mean difference and variance of difference
 begin
-	d11 = [0.00021238601370594524; 0.0005874635850346976; 0.00014895739100495575; 0.00012584467322085402;;]
-	d21 = [0.006835977658822223; 0.02114271922385953; 0.005451541545899374; 0.0034521158479108747;;]
-	d31 = [0.018465575972967673; 0.036735109536253675; 0.015520622243533922; 0.012150219552736985;;]
-	v11 = [2.2350924657948016e-7; 2.726054108948392e-6; 6.077405519181655e-8; 1.3498761833303232e-8;;]
-	v21 = [0.000405937755806436; 0.00292114295799311; 9.314783222717223e-5; 6.4750038157188004e-6;;]
-	v31 = [0.0015617699206279623; 0.007588689042610542; 0.0005427578494715818; 0.00010554780823108499;;]
+	sim1 = readlines("MCMCout1.txt")
+	data1 = [eval(Meta.parse(line)) for line in sim1]
+	d11,d21,d31,v11,v21,v31 = data1
 	rh1 = round(rho[1],sigdigits = 3)
 end
 
 # ╔═╡ f9d4d530-8f31-43e5-a373-8a164b4a98e9
 begin
 	plot(N, [d11 d21 d31], ribbon = [v11 v21 v31], label = [501 101 51], xaxis=:log, dpi = 500)
+	plot!(N, [d11 d21 d31], dpi = 500, xscale =:log10, legend = false, seriestype =:scatter, seriescolor =:black)
 	title!(L"$\rho = %$rh1$")
 	ylabel!(L"Difference in $\ell_2$ error")
 	xlabel!("Sample Size")
+
 end
 
 # ╔═╡ 92b19bca-58d9-4e7f-9270-8b645258bd06
 begin
-	d12 = [0.00038409711951237213; 7.139805747513606e-6; 4.427978152676815e-6; 3.7693365712243577e-6;;]
-	d22 = [0.008395850276754846; 0.00020481839815573722; 6.615104534866135e-5; 6.472107358774792e-5;;]
-	d32 = [0.01106568389725604; 0.0005275971464932638; 0.0015586479233885343; 0.00026813011313429056;;]
-
-	v12 = [1.3558297199095441e-6; 1.152559572569658e-10; 1.821224402005647e-11; 3.5379607700977515e-11;;]
-	v22 = [0.000604118957283528; 9.353028223000985e-8; 1.0491752346249886e-8; 6.3441182767254314e-9;;]
-	v32 = [0.0008830207963012782; 4.095521509345629e-7; 8.4990529253796e-6; 5.117333820860578e-8;;]
+	sim2 = readlines("MCMCout2.txt")
+	data2 = [eval(Meta.parse(line)) for line in sim2]
+	d12,d22,d32,v12,v22,v32 = data2
 
 	rh2 = round(rho[2], sigdigits = 3)
 end
@@ -60,6 +53,7 @@ end
 # ╔═╡ be0cb98c-0dec-4da1-932f-742f57998bd1
 begin
 	plot(N, [d12 d22 d32], ribbon = [v12 v22 v32], label = [501 101 51], xaxis=:log, dpi = 500)
+	plot!(N, [d12 d22 d32], dpi = 500, xscale =:log10, legend = false, seriestype =:scatter, seriescolor =:black)
 	title!(L"$\rho = %$rh2$")
 	ylabel!(L"Difference in $\ell_2$ error")
 	xlabel!("Sample Size")
@@ -68,20 +62,16 @@ end
 
 # ╔═╡ a3de8d42-a7af-4ae1-ab60-70667b450cbc
 begin
-	d13 = [2.2767072604956696e-8; 2.6825443333322595e-8; -1.284846995242006e-6; -8.499946972939653e-8;;]
-	d23 = [5.857887548255114e-6; 2.6835676777636764e-6; -8.983705491072413e-7; 1.6330459065017067e-7;;]
-	d33 = [2.6350610558001364e-5; 7.509911228620325e-6; 5.663139530209805e-7; 7.016606511811573e-7;;]
-
-	v13 = [3.156279621581616e-13; 1.1266776951879623e-15; 3.956641009688733e-12; 8.864082806811825e-15;;]
-	v23 = [3.041040375340853e-11; 1.7915695869394076e-11; 4.652809409533822e-12; 8.694024677758047e-14;;]
-	v33 = [4.613930772259631e-10; 6.458858229373729e-11; 5.43788003920707e-12; 5.604996985180237e-13;;]
-
+	sim3 = readlines("MCMCout3.txt")
+	data3 = [eval(Meta.parse(line)) for line in sim3]
+	d13,d23,d33,v13,v23,v33 = data3
 	rh3 = round(rho[3], sigdigits = 3)
 end
 
 # ╔═╡ 644d1007-b315-44e4-a3f9-24671c119cd8
 begin
 	plot(N, [d13 d23 d33], ribbon = [v13 v23 v33], label = [501 101 51], xaxis=:log, dpi = 500)
+	plot!(N, [d13 d23 d33], dpi = 500, xscale =:log10, legend = false, seriestype =:scatter, seriescolor =:black)
 	title!(L"$\rho = %$rh3$")
 	ylabel!(L"Difference in $\ell_2$ error")
 	xlabel!("Sample Size")
@@ -91,19 +81,16 @@ end
 # ╔═╡ 426aa5d0-8277-11f0-2475-e3e4a5f1c22f
 #Load in simulation data output in terms of mean difference and variance of difference
 begin
-	d14 = [6.84878163381697e-7; 2.0689972846099636e-7; 1.0251754538614932e-7; 2.360737081374964e-8;;]
-	d24 = [2.7728205729382616e-5; 1.0133803718792578e-5; 4.237912444171599e-6; 1.1661658104067385e-6;;]
-	d34 = [6.679346925606567e-5; 5.213612284435953e-5; 1.9025463226096663e-5; 6.527262442546089e-6;;]
-	
-	v14 = [1.5424610970921329e-12; 4.597239775781972e-14; 2.586960629381066e-14; 4.896623291752197e-15;;]
-	v24 = [6.384080186235489e-10; 1.0434223432787326e-10; 9.411960430087186e-12; 8.663489578736277e-13;;]
-	v34 = [4.472881958099392e-9; 2.5108134105703547e-9; 4.1702263949583274e-10; 4.2759630450008706e-11;;]
+	sim4 = readlines("MCMCout4.txt")
+	data4 = [eval(Meta.parse(line)) for line in sim4]
+	d14,d24,d34,v14,v24,v34 = data4
 	rh4 = round(rho[4],sigdigits = 3)
 end
 
 # ╔═╡ e40c0350-6ec8-4e86-ac9b-5ec4923262d5
 begin
 	plot(N, [d14 d24 d34], ribbon = [v14 v24 v34], label = [501 101 51], xaxis=:log, dpi = 500)
+	plot!(N, [d14 d24 d34], dpi = 500, xscale =:log10, legend = false, seriestype =:scatter, seriescolor =:black)
 	title!(L"$\rho = %$rh4$")
 	ylabel!(L"Difference in $\ell_2$ error")
 	xlabel!("Sample Size")

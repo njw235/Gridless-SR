@@ -19,7 +19,11 @@ $ julia
 
 # File Content
 
-This project consists of raw julia files and Pluto Notebooks.
+This project consists of R files, raw julia files, and Pluto Notebooks.
+
+R files:
+
+1. time_comparison.R - This file contains the implementation for comparing the runtime and performance of the grid version of the support reduction algorithm for AR(1) chains with and without the low-degree polynomial approximation
 
 Julia files:
 
@@ -38,6 +42,8 @@ Pluto Notebooks:
 3. RunnableExample.jl: This file contains a small runnable example from SmallExample.jl but in the form of a pluto notebook for ease of readibility.
 
 # Running a given file
+
+## Running a julia file
 
 Once you have activated the project environment and have the required dependencies from the file, you can run any of the given julia files from the command line:
 

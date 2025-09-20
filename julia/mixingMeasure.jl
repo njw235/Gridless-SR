@@ -7,7 +7,7 @@ using LinearAlgebra
 using LinearSolve
 using Plots
 using StatsBase
-
+using HomotopyContinuation
 
 transform = function(x,i)
 	return(sign(i)*((1+x)*(1-2.0^-abs(i)) - x))
@@ -56,8 +56,10 @@ grad_opt = function(p, supp, weight, solver,delta,x)
 		set_silent(model)
 		optimize!(model)
 			
+	v = moment_matrix(model[:c])
+		sol = SemialgebraicSetsHCSolver(; compile = false)	
 		v = moment_matrix(model[:c])
-		pt = atomic_measure(v, FixedRank(1))
+		pt = atomic_measure(v, 1e-4, sol)
 		if(typeof(pt) != Nothing)
 			if(length(pt.atoms[1].center) == 1)
 				supports[ind[1]] = transform(pt.atoms[1].center[1],ind[2])

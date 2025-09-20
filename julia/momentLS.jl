@@ -7,6 +7,7 @@ using Distributions
 using LinearAlgebra
 using LinearSolve
 using Plots
+using HomotopyContinuation
 
 
 transform = function(x,i)
@@ -50,9 +51,9 @@ grad_optimize = function(r,p, supp, weight,delta)
 		@objective(model, Max, s)
 		set_silent(model)
 		optimize!(model)
-			
+		sol = SemialgebraicSetsHCSolver(; compile = false)	
 		v = moment_matrix(model[:c])
-		pt = atomic_measure(v, FixedRank(1))
+		pt = atomic_measure(v, 1e-4, sol)
 		if(typeof(pt) != Nothing)
 			if(length(pt.atoms[1].center) == 1)
 				supports[ind[1]] = transform(pt.atoms[1].center[1],ind[2])
@@ -150,7 +151,7 @@ momentLS = function(a, b, r, tol)
 		
 		v = moment_matrix(model[:c])
 		
-		pt = atomic_measure(v, FixedRank(1))
+		pt = atomic_measure(v,1e-4)
 		print(pt)
 		
 		if(length(pt.atoms[1].center) == 1)
