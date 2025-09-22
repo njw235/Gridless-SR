@@ -260,7 +260,7 @@ i = ARGS[1]
 Random.seed!(1234);
 errors = zeros(100)
 	for j in 1:100
-	            p = sim_data(N,i)
+	            p = sim_data(1000,i)
 	
 	            if(i == 1)
 	                d = 0.4
