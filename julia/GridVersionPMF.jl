@@ -7,18 +7,18 @@ using RCall
 
 R"interval = seq(0,1,10^{-3})"
 R"Emp <- function(x) {  
-	  # compute the empirical frequence of x
-	  n = length(x)
-	  supp <- seq(0,max(x),by=1)
-	  count <- rep(0,length(supp))
-	  for(i in 1:length(count)) {
-	    count[i] <- sum(x==supp[i])
-	  }
-	  
-	  return(list(supp=supp,freq=count/n))
-	  
-	  
-	}"
+   # compute the empirical frequence of x
+   n = length(x)
+   supp <- seq(0,max(x),by=1)
+   count <- rep(0,length(supp))
+   for(i in 1:length(count)) {
+     count[i] <- sum(x==supp[i])
+   }
+   
+   return(list(supp=supp,freq=count/n))
+   
+   
+ }"
 R"InitializeC = function(x, alpha){
   V  = 0:max(x)
   T = sum(Emp(x)$freq*alpha^V)
@@ -97,7 +97,7 @@ R"SolveUncons  = function(x, S){
   
   return(List$Sol)
 }"
-	
+
 R"ReduceSuppfun = function(S1, C1, S2, C2){
   
   S.m = c(S1, S2)
@@ -208,93 +208,93 @@ R"CompMonLSE= function(x,alpha0,epsilon){
 
 
 function sim_data(n, option)::AbstractArray{Integer}
-	    data = []
-	    for i in 1:n
-	        if(option == 1)
-	            r = rand(Uniform(0,1))
-	            if(r < 1/3)
-	                append!(data, rand(Geometric(0.8)))
-	            else
-	                append!(data, rand(Geometric(0.6)))
-	            end
-	        
-	        elseif(option == 2)
-	            r = rand(Uniform(0,1))
-	            if(r < 1/4)
-	                append!(data, rand(Geometric(0.9)))
-	            elseif(r > 1/4 && r < 3/4)
-	                append!(data, rand(Geometric(0.7)))
-	            else
-	                append!(data, rand(Geometric(0.2)))
-	            end
-	        
-	        else
-	            r = rand(Uniform(0,1))
-	            append!(data, rand(Geometric(1-r)))
-	        end
-	    end
-	    return(data)
+  data = []
+  for i in 1:n
+    if (option == 1)
+      r = rand(Uniform(0, 1))
+      if (r < 1 / 3)
+        append!(data, rand(Geometric(0.8)))
+      else
+        append!(data, rand(Geometric(0.6)))
+      end
+
+    elseif (option == 2)
+      r = rand(Uniform(0, 1))
+      if (r < 1 / 4)
+        append!(data, rand(Geometric(0.9)))
+      elseif (r > 1 / 4 && r < 3 / 4)
+        append!(data, rand(Geometric(0.7)))
+      else
+        append!(data, rand(Geometric(0.2)))
+      end
+
+    else
+      r = rand(Uniform(0, 1))
+      append!(data, rand(Geometric(1 - r)))
+    end
+  end
+  return (data)
 end
-	
-	
-	
-	
-	# Simulation studies
-	# Using the three pmfs from the paper given
-	# Two finite mixtures of geometrics and a mixture model with
-	# Uniform distribution as the mixing measure 
-	
+
+
+
+
+# Simulation studies
+# Using the three pmfs from the paper given
+# Two finite mixtures of geometrics and a mixture model with
+# Uniform distribution as the mixing measure 
+
 
 function pmft3(x)
-	1/((x+1)*(x+2))
+  1 / ((x + 1) * (x + 2))
 end
 function pmft2(x)
-	    0.25*0.9*0.1^x + 0.5*0.7*0.3^x + 0.25*0.2*0.8^x
-end
-	
-function pmft1(x)
-	    (1/3)*0.8*0.2^x + (2/3)*0.6*0.4^x
+  0.25 * 0.9 * 0.1^x + 0.5 * 0.7 * 0.3^x + 0.25 * 0.2 * 0.8^x
 end
 
-i = ARGS[1]	
+function pmft1(x)
+  (1 / 3) * 0.8 * 0.2^x + (2 / 3) * 0.6 * 0.4^x
+end
+
+i = ARGS[1]
 Random.seed!(1234);
 errors = zeros(100)
-	for j in 1:100
-	            p = sim_data(1000,i)
-	
-	            if(i == 1)
-	                d = 0.4
-	            elseif(i == 2)
-	                d = 0.1
-				else
-					d = 0.002
-	            end
-	
-	            supp = [0.1]
-	            weight = [0.5]
-				@rput p
-	            R"m = CompMonLSE(p, 0.1, 1e-8)"
-	
-	            R"supp = m$S0"
-	            R"weight = m$C0"
-				@rget supp
-				@rget weight
-	            function pmf(x)
-	                sum((1 .- supp) .* weight .* supp.^x)
-	            end
-	            
-	            x = [0:1:10000;]
-	
-	            if(i == 1)
-	                errors[j] = sum((pmf.(x) .- pmft1.(x)).^2)
-	               
-	            elseif(i == 2)
-	                errors[j] = sum((pmf.(x) .- pmft2.(x)).^2)
-				else
-					errors[j] = sum((pmf.(x) .- pmft3.(x)).^2)
-				end
-	
-	    end
+for j in 1:100
+  p = sim_data(1000, i)
+
+  if (i == 1)
+    d = 0.4
+  elseif (i == 2)
+    d = 0.1
+  else
+    d = 0.002
+  end
+
+  supp = [0.1]
+  weight = [0.5]
+  @rput p
+  R"m = CompMonLSE(p, 0.1, 1e-8)"
+
+  R"supp = m$S0"
+  R"weight = m$C0"
+  @rget supp
+  @rget weight
+  function pmf(x)
+    sum((1 .- supp) .* weight .* supp .^ x)
+  end
+
+  x = [0:1:10000;]
+
+  if (i == 1)
+    errors[j] = sum((pmf.(x) .- pmft1.(x)) .^ 2)
+
+  elseif (i == 2)
+    errors[j] = sum((pmf.(x) .- pmft2.(x)) .^ 2)
+  else
+    errors[j] = sum((pmf.(x) .- pmft3.(x)) .^ 2)
+  end
+
+end
 
 
 open(string("gridpmf", ARGS[1], ".txt"), "w") do io
