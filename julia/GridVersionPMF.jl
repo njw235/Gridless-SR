@@ -293,7 +293,7 @@ for j in 1:100
   else
     errors[j] = sum((pmf.(x) .- pmft3.(x)) .^ 2)
   end
-
+  println(errors[j])
 end
 
 
