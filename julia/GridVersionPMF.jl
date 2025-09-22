@@ -297,6 +297,6 @@ for j in 1:100
 end
 
 
-open(string("gridpmf", ARGS[1], ".txt"), "w") do io
-  print(io, errordict)
+open(string("gridpmf", i, ".txt"), "w") do io
+  print(io, errors)
 end
