@@ -5,7 +5,7 @@ using RCall
 #Adding in the grid based implementation of the support reduction algorithm
 # Documentation and code can be found at https://people.math.ethz.ch/~fadouab/ComparisonEstimSR.r
 
-R"interval = seq(0,1,10^{-3})"
+R"interval = seq(0,1,length = 501)"
 R"Emp <- function(x) {  
    # compute the empirical frequence of x
    n = length(x)
@@ -83,15 +83,7 @@ R"SolveUncons  = function(x, S){
   for(i in 1:length(S)){
     B[i]  = Interm(x=x, alpha=S[i])
   }
-  svdM = svd(M)
-  uM = svdM$u
-  vM = svdM$v
-  diagM =diag(1/svdM$d)
-  Sol1 = solve(uM, B)
-  Sol2 = diagM%*%Sol1
-  Sol  = vM%*%Sol2
-  
-  #Sol = solve(M, B)
+  Sol = solve(M, B)
   Sol= as.vector(Sol)
   List = list(Sol = Sol, Check1=as.vector(M%*%Sol)-B)
   
@@ -169,7 +161,7 @@ R"CompMonLSE= function(x,alpha0,epsilon){
     #Count <- 0
     while(min.C < 0){  # condition indicating that the unconstrained solution is not permissible
       # and that we should go into the reduction step
-      
+      print(Count)
       Count <- Count+1
 
       Snew = ReduceSuppfun(S1=S0, C1=C0, S2=Snew, C2=Cnew)
@@ -256,7 +248,7 @@ function pmft1(x)
   (1 / 3) * 0.8 * 0.2^x + (2 / 3) * 0.6 * 0.4^x
 end
 
-i = ARGS[1]
+#i = ARGS[1]
 Random.seed!(1234);
 errors = zeros(100)
 for j in 1:100
