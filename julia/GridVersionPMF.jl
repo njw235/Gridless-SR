@@ -248,7 +248,7 @@ function pmft1(x)
   (1 / 3) * 0.8 * 0.2^x + (2 / 3) * 0.6 * 0.4^x
 end
 
-#i = ARGS[1]
+i = ARGS[1]
 Random.seed!(1234);
 errors = zeros(100)
 for j in 1:100
