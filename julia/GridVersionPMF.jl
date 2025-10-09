@@ -4,8 +4,9 @@ using RCall
 
 #Adding in the grid based implementation of the support reduction algorithm
 # Documentation and code can be found at https://people.math.ethz.ch/~fadouab/ComparisonEstimSR.r
-
-R"interval = seq(0,1,length = 501)"
+gs = ARGS[2]
+@rput gs
+R"interval = seq(0,1,length = as.integer(gs))"
 R"Emp <- function(x) {  
    # compute the empirical frequence of x
    n = length(x)
@@ -248,7 +249,7 @@ function pmft1(x)
   (1 / 3) * 0.8 * 0.2^x + (2 / 3) * 0.6 * 0.4^x
 end
 
-i = 3
+i = ARGS[1]
 Random.seed!(1234);
 errors = zeros(50)
 for j in 1:50
