@@ -6,7 +6,7 @@ using RCall
 # Documentation and code can be found at https://people.math.ethz.ch/~fadouab/ComparisonEstimSR.r
 gs = ARGS[2]
 @rput gs
-
+R"library(momentLS)"
 function sim_data(n, option)::AbstractArray{Integer}
   data = []
   for i in 1:n
@@ -56,10 +56,10 @@ function pmft1(x)
   (1 / 3) * 0.8 * 0.2^x + (2 / 3) * 0.6 * 0.4^x
 end
 
-i = 1
+i = ARGS[1]
 Random.seed!(1234);
-errors = zeros(100)
-for j in 1:100
+errors = zeros(50)
+for j in 1:50
   p = sim_data(1000, i)
 
   if (i == 1)
@@ -76,14 +76,13 @@ for j in 1:100
   R"counts=table(p)"
   R"pBar=rep(0,max(p)+1)"
   R"pBar[as.numeric(names(counts))+1]=counts/sum(counts)"
-  R"alphaGrid=momentLS::makeGrid(upper_threshold = 1-1e-4,nX=201,cm=TRUE,scale='equidist')"
-  R"XtX=(1-alphaGrid)/(1-outer(alphaGrid,alphaGrid)) #use 1/(1-xy) inner product instead of (1+xy)/(1-xy)"
+  R"alphaGrid=momentLS::makeGrid(upper_threshold = 1-1e-4,nX=as.integer(gs),cm=TRUE,scale='equidist')"
+  R"XtX=1/(1-outer(alphaGrid,alphaGrid)) #use 1/(1-xy) inner product instead of (1+xy)/(1-xy)"
   R"s_alpha=sqrt(diag(XtX))"
   R"Xtr_0=Xtr_cpp(alphaGrid,pBar,standardization=FALSE,epsilon = 1e-10)"
   R"Xtr=pBar[1]/2+Xtr_0/2"
   R"XtX_standardized=diag(1/s_alpha)%*%XtX%*%diag(1/s_alpha)"
   R"Xtr_standardized=Xtr/s_alpha"
-  R"m = CompMonLSE(p, 0.1, 1e-8)"
   R"fit=SR1(r=pBar,delta=NULL,alphaGrid = alphaGrid,
         precomputed=list(s_alpha=s_alpha,
                          XtX=XtX_standardized,
