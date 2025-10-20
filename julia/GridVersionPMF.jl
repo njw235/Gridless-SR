@@ -4,11 +4,8 @@ using RCall
 
 #Adding in the grid based implementation of the support reduction algorithm
 # Documentation and code can be found at https://people.math.ethz.ch/~fadouab/ComparisonEstimSR.r
-
-R"library(momentLS)"
-
-
-
+gs = ARGS[2]
+@rput gs
 
 function sim_data(n, option)::AbstractArray{Integer}
   data = []
@@ -115,6 +112,6 @@ for j in 1:100
 end
 
 
-open(string("gridpmf", i, ".txt"), "w") do io
+open(string(gs,"gridpmf", i, ".txt"), "w") do io
   print(io, errors)
 end
