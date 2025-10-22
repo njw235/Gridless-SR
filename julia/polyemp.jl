@@ -48,7 +48,7 @@ solve_LDA = function(f,g)
         model = SOSModel(Clarabel.Optimizer)
         set_string_names_on_creation(model, false)
 		@polyvar x
-		fx = sum(p[ind][1] .* transform(x, ind, J, length(f)) .^[0:1:(length(p[ind][1])-1);])
+		fx = sum(p[ind][1] .* x .^[0:1:(length(p[ind][1])-1);])
         gx = sum(g .* transform(x,ind,J, length(f)) .^ [0:1:4;])
 
         S = @set x >= 0 && 1-x >= 0
