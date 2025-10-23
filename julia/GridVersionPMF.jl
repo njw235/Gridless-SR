@@ -119,8 +119,10 @@ for j in 1:50
 
   elseif (i == 2)
     errors[j] = sum((pmf.(x) .- pmft2.(x)) .^ 2)
-  else
+  elseif (i==3)
     errors[j] = sum((pmf.(x) .- pmft3.(x)) .^ 2)
+  else
+    errors[j] = sum((pmf.(x) .- pmft4.(x)) .^ 2)
   end
   @rget err
   oerrors[j] = err
