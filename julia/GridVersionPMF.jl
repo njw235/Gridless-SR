@@ -127,7 +127,7 @@ for j in 1:50
 end
 
 
-open(string("gridpmf", i, ".txt"), "w") do io
+open(string(gs,"gridpmf", i, ".txt"), "w") do io
   println(io, errors)
   println(io, oerrors)
 end
