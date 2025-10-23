@@ -129,5 +129,5 @@ end
 
 open(string("gridpmf", i, ".txt"), "w") do io
   println(io, errors)
-  println(io, errors)
+  println(io, oerrors)
 end
