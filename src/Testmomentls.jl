@@ -6,21 +6,20 @@ error1 = zeros(50)
 error2 = zeros(50)
 error3 = zeros(50)
 error4 = zeros(50)
+ms = Matrix{Float64}
 
-
-R"set.seed(9999)"
+R"set.seed(1234)"
 R"rho = c(runif(1, -0.9, -0.7), runif(1, -0.6, -0.4), runif(1, -0.2, 0.2), runif(1, 0.4, 0.6), runif(1, 0.7, 0.9))"
+i = ARGS[1]
 @rput i
 R"rh = rho[as.integer(i)]"
-N = 1000
-for j in 1:10
-    @rput N
-    R"x = generateChain(list(type  = 'AR', rho = rh, M = N))$x"
+for j in 1:50
+    R"x = generateChain(list(type  = 'AR', rho = rh, M = 1000))$x"
 	R"r = autocov(x)"
     R"dhat = tune_delta(x,5)$delta*0.8"
     @rget r
     @rget dhat
-    m = momentLSmod(r, dhat, [0.0],[0.0], 3e-8)
+    m = momentLSmod(r, dhat, [0.0],[0.0], 1e-9)
     supp = m[1]
 	weight = m[2]
     @rput supp
@@ -44,6 +43,9 @@ for j in 1:10
     R"errorp = L2diff_L2Moment(r,supp, weight)"
 	@rget errorp
 	errorps[j] = errorp
+	measure = hcat(supp, weight)
+	println(measure)
+	global ms = vcat(ms, measure)
 end
 
 @rget rh
@@ -66,14 +68,13 @@ v3 = var(ep3)
 v4 = var(ep4)
 
 open(string("MCMCout",ARGS[1],".txt"), "w") do io
-    println(io, d1)
-    println(io, d2)
-    println(io,d3)
-	println(io, d4)
-    println(io, v1)
-    println(io, v2)
-    println(io,v3)
-	println(io, v4)
+    println(io, error1)
+    println(io, error2)
+    println(io, error3)
+    println(io, error4)
+    println(io, errorps)
+    println(io,rh)
+    println(io, ms)
 end
 #N = 6 .^[2:1:5;]
 #plot(N, [d1 d2 d3], yerr = [v1 v2 v3], label = [501 101 51], xaxis=:log)
@@ -82,5 +83,3 @@ end
 #xlabel!(L"Sample Size")
 
 #savefig(string("plot", ARGS[1], ".png"))
-
-
