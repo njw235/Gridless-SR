@@ -7,6 +7,7 @@ using RCall
 gs = ARGS[2]
 @rput gs
 R"interval = seq(0,1,length = as.integer(gs))"
+R"interval = interval[-length(interval)]"
 R"Emp <- function(x) {  
    # compute the empirical frequence of x
    n = length(x)
@@ -155,14 +156,14 @@ R"CompMonLSE= function(x,alpha0,epsilon){
     Snew=c(S0,thetamin)  # The new suport
     Snew = sort(Snew)
     
-    
+    print(count)
     Cnew=SolveUncons(x=x,S=Snew)  # Solve the unconstrained LS problem
     
     min.C <- min(Cnew) 
     #Count <- 0
     while(min.C < 0){  # condition indicating that the unconstrained solution is not permissible
       # and that we should go into the reduction step
-      print(Count)
+      
       Count <- Count+1
 
       Snew = ReduceSuppfun(S1=S0, C1=C0, S2=Snew, C2=Cnew)
@@ -289,6 +290,7 @@ for j in 1:50
   println(errors[j])
 end
 
+R"print(length(interval))"
 
 open(string(gs,"gridpmf", i, ".txt"), "w") do io
   print(io, errors)
