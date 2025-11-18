@@ -2,7 +2,7 @@ include("momentLS.jl")
 R"load('MC_chains.Rdata')"
 R"library(momentLS)"
 R"print(getwd())"
-R"source('SupportReduction/julia/simulateBLasso.R')"
+R"source('simulateBLasso.R')"
 R"measlist = vector('list', length = 50)"
 i = ARGS[1]
 errors = zeros(50)
