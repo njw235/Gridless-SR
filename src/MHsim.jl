@@ -2,13 +2,14 @@ include("momentLS.jl")
 R"library(momentLS)"
 
 R"source('SupportReduction/julia/simulateMH.R')"
-errors = zeros(50)
+errors = zeros(51)
+terrors = zeros(51)
 measures = Matrix{Float64}
 R"set.seed(1234)"
 R"g = matrix(rnorm(50), ncol = 1)"
 R"discreteMC = simulate_discreteMC(nStates=50)"
 R"chainParams = list(type = 'MH', M = 1000, nStates = 50, g = g, discreteMC = discreteMC, d = 1)"
-for j in 1:50
+for j in 1:51
 
     R"ch = generateChain(chainParams)"
 
@@ -21,18 +22,22 @@ for j in 1:50
     weight = m[2]
     @rput supp
     @rput weight
-    R"m = SR1(r, dhat)"
 
-    R"err = L2diff_L2Moment(r, m$support, m$weights) - L2diff_L2Moment(r, supp, weight)"
+    R"err = L2diff_L2Moment(r, supp, weight)"
+    R"terr = L2diff_twoMoments(supp, weight, ch$F_support, ch$F_weights)"
+    @rget terr
     @rget err
     errors[j] = err
+    terrors[j] = terr
     measure = hcat(supp, weight)
 	println(measure)
 	global measures = vcat(measures, measure)
 end
 
+println(terrors)
 
 open("MH.txt", "w") do io
     println(io, errors)
     println(io, measures)
+    println(io, terrors)
 end
