@@ -1,11 +1,11 @@
 simulateBLasso = function(M, seed0, warmup=10000){
   
     # load data
-    load("SupportReduction/julia/concreteStrength.Rdata")
+    load("concreteStrength.Rdata")
     # load bayesLasso sampler
-    source("SupportReduction/julia/bayesLasso.R")
+    source("bayesLasso.R")
     # load "ground truth" 
-    load("SupportReduction/julia/concrete_truth.Rdata")
+    load("concrete_truth.Rdata")
     
     # sample
     set.seed(seed0)
