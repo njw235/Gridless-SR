@@ -7,7 +7,6 @@ using Distributions
 using LinearAlgebra
 using LinearSolve
 using Plots
-using HomotopyContinuation
 
 
 transform = function(x,i)
@@ -51,9 +50,9 @@ grad_optimize = function(r,p, supp, weight,delta)
 		@objective(model, Max, s)
 		set_silent(model)
 		optimize!(model)
-		sol = SemialgebraicSetsHCSolver(; compile = false)	
+			
 		v = moment_matrix(model[:c])
-		pt = atomic_measure(v, 1e-4, sol)
+		pt = atomic_measure(v, FixedRank(1))
 		if(typeof(pt) != Nothing)
 			if(length(pt.atoms[1].center) == 1)
 				supports[ind[1]] = transform(pt.atoms[1].center[1],ind[2])
@@ -151,7 +150,7 @@ momentLS = function(a, b, r, tol)
 		
 		v = moment_matrix(model[:c])
 		
-		pt = atomic_measure(v,1e-4)
+		pt = atomic_measure(v, FixedRank(1))
 		print(pt)
 		
 		if(length(pt.atoms[1].center) == 1)
@@ -213,11 +212,7 @@ end
 estimate_poly = function(i,r)
 	m = Int(ceil(exp(1+1/exp(1))*log(10^9)))
 	t = Int(floor(2^abs(i) * log(10^9)))
-	if i > length(r)
-		a0 = 1-1/length(r)
-	else
 		a0 = (1- 2.0^-abs(i))
-	end
 	up = min(m-1,t)
 
 	b = zeros(up)
@@ -257,8 +252,9 @@ momentLSmod = function(r, delta,supp, weight, tol, graph = false)
 	n = length(r)
 	exponents = [0:1:n-1;]
 	conv = false
+	eftol = 6*tol*sum(abs.(r))
 	count = 0
-	while(count < 100 && !conv)
+	while(count < 75 && !conv)
 		SRstep = SR(supp, weight,r)
 		supp = SRstep[1]
 		weight = SRstep[2]
@@ -266,7 +262,7 @@ momentLSmod = function(r, delta,supp, weight, tol, graph = false)
 		
 		points = grad_optimize(r, dictionary, supp, weight,delta)
 		index = findmin(points[1])[2]
-		if(findmin(points[1])[1] > -tol)
+		if(findmin(points[1])[1] > -eftol)
 			conv = true
 		end
 		append!(supp, points[2][index])
@@ -288,8 +284,9 @@ momentLSmod = function(r, delta,supp, weight, tol, graph = false)
             
 		count = count + 1
 	end
-	
+	if(!conv)
+	    println("failed to cvg")
+	end
 	return(supp, weight)
 end
-
 
