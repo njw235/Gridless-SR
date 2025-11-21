@@ -51,7 +51,9 @@ grad_optimize = function(r,p, supp, weight,delta)
 		set_silent(model)
 		optimize!(model)
 			
+			
 		v = moment_matrix(model[:c])
+		pt = atomic_measure(v, FixedRank(1))
 		pt = atomic_measure(v, FixedRank(1))
 		if(typeof(pt) != Nothing)
 			if(length(pt.atoms[1].center) == 1)
@@ -150,6 +152,7 @@ momentLS = function(a, b, r, tol)
 		
 		v = moment_matrix(model[:c])
 		
+		pt = atomic_measure(v, FixedRank(1))
 		pt = atomic_measure(v, FixedRank(1))
 		print(pt)
 		
@@ -253,6 +256,7 @@ momentLSmod = function(r, delta,supp, weight, tol, graph = false)
 	exponents = [0:1:n-1;]
 	conv = false
 	eftol = 6*tol*sum(abs.(r))
+	eftol = 6*tol*sum(abs.(r))
 	count = 0
 	while(count < 125 && !conv)
 		SRstep = SR(supp, weight,r)
@@ -262,6 +266,7 @@ momentLSmod = function(r, delta,supp, weight, tol, graph = false)
 		
 		points = grad_optimize(r, dictionary, supp, weight,delta)
 		index = findmin(points[1])[2]
+		if(findmin(points[1])[1] > -eftol)
 		if(findmin(points[1])[1] > -eftol)
 			conv = true
 		end
@@ -283,6 +288,9 @@ momentLSmod = function(r, delta,supp, weight, tol, graph = false)
         end
             
 		count = count + 1
+	end
+	if(!conv)
+	    println("failed to cvg")
 	end
 	if(!conv)
 	    println("failed to cvg")

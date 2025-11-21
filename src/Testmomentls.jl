@@ -6,6 +6,7 @@ error1 = zeros(50)
 error2 = zeros(50)
 error3 = zeros(50)
 error4 = zeros(50)
+Terrorsp = zeros(50)
 ms = Matrix{Float64}
 
 R"set.seed(1234)"
@@ -32,10 +33,12 @@ for j in 1:50
 	R"e2 = L2diff_L2Moment(r, m2$support, m2$weights)"
     R"e3 = L2diff_L2Moment(r, m3$support, m3$weights)"
 	R"e4 = L2diff_L2Moment(r, m4$support, m4$weights)"
+	R"terr = L2diff_twoMoments(supp, weight, ch$F_support, ch$F_weights)"
 	@rget e1
     @rget e2
 	@rget e3
 	@rget e4
+	@rget terr
     error1[j] = e1
 	error2[j] = e2
     error3[j] = e3
@@ -43,13 +46,14 @@ for j in 1:50
     R"errorp = L2diff_L2Moment(r,supp, weight)"
 	@rget errorp
 	errorps[j] = errorp
+	Terrorsp = terr
 	measure = hcat(supp, weight)
 	println(measure)
 	global ms = vcat(ms, measure)
 end
 
 @rget rh
-
+println(Terrorsp)
 
 ep1 = error1 - errorps
 ep2 = error2 - errorps
@@ -75,6 +79,7 @@ open(string("MCMCout",ARGS[1],".txt"), "w") do io
     println(io, errorps)
     println(io,rh)
     println(io, ms)
+    println(io, Terrorsp)
 end
 #N = 6 .^[2:1:5;]
 #plot(N, [d1 d2 d3], yerr = [v1 v2 v3], label = [501 101 51], xaxis=:log)
