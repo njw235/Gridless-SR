@@ -3,7 +3,6 @@ R"load('MC_chains.Rdata')"
 R"library(momentLS)"
 R"print(getwd())"
 R"source('simulateBLasso.R')"
-R"measlist = vector('list', length = 50)"
 i = ARGS[1]
 errors = zeros(50)
 for j in 1:50
@@ -24,10 +23,7 @@ for j in 1:50
     @rget err
     errors[j] = err
     println(err)
-    R"measlist[[j]] = cbind(supp, weight)"
 end
-R"print(measlist)"
-R"saveRDS(measlist, paste(i, 'Blasso.rds', sep = ''))"
 open(string("BLasso", i, ".txt"), "w") do io
     println(io, errors)
 end
