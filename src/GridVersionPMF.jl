@@ -250,7 +250,7 @@ function pmft1(x)
   (1 / 3) * 0.8 * 0.2^x + (2 / 3) * 0.6 * 0.4^x
 end
 
-i = 2
+i = parse(Int64, ARGS[1])
 Random.seed!(1234);
 errors = zeros(50)
 for j in 1:50
@@ -295,3 +295,4 @@ R"print(length(interval))"
 open(string(gs,"gridpmf", i, ".txt"), "w") do io
   print(io, errors)
 end
+
