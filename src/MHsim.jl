@@ -1,7 +1,7 @@
 include("momentLS.jl")
 R"library(momentLS)"
 
-R"source('SupportReduction/julia/simulateMH.R')"
+R"source('simulateMH.R')"
 errors = zeros(51)
 terrors = zeros(51)
 measures = Matrix{Float64}
