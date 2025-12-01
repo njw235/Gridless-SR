@@ -19,11 +19,12 @@ $ julia
 
 # File Content
 
-This project consists of R files and julia files all in the src folder.
+This project consists of R files and julia files all in the src folder. The relevant files for replicating the tables in the paper are: 
 1. Blassosim.jl - contains code to run the simulations of the Blasso example
 2. MHsim.jl - contains code to run simulations of Metropolis-Hastings examples
 3. Testsmoments.jl - Contains code to run the AR(1) simulations.
 4. pmfestimationex.jl - contains code to run the pmf estimation simulations.
+5. time_comparison.R - contains code comparing the runtime LDA to no approximation for the grid based SR. 
 
 # Running a given file
 
