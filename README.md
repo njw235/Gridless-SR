@@ -19,27 +19,11 @@ $ julia
 
 # File Content
 
-This project consists of R files, raw julia files, and Pluto Notebooks.
-
-R files:
-
-1. time_comparison.R - This file contains the implementation for comparing the runtime and performance of the grid version of the support reduction algorithm for AR(1) chains with and without the low-degree polynomial approximation
-
-Julia files:
-
-1. momentLS.jl: This file contains the implementation of the low-degree polynomial approximation and the gridless support reduction algorithm.
-2. mixingMeasure.jl: This file contains the implementation as above but for the pmf estimation problem.
-3. polyemp.jl: This file contains the empirical testing of the time complexity of the SOS problem described in section 5.1.
-4. pmfestimationex: This file contains the empirical testing for pmf estimation in section 5.2.
-5. auxMCMCtest.jl: This file contains the empirical testing for the BLASSO and MH chains in section 5.3.
-6. Testmomentls.jl: This file contains the empirical testing for the AR(1) example in section 5.3.
-7. SmallExample.jl: This file contains a small example showing the fitting of a moment sequence that is easily runnable as opposed to the longer run times of the other files.
-
-Pluto Notebooks:
-
-1. AutocovariancePlot.jl: This file contains a runnable pluto notebook to reproduce the autocovariance plots.
-2. pmfplots.jl: This file contains a runnable pluto notebook to reproduce the pmf error plots.
-3. RunnableExample.jl: This file contains a small runnable example from SmallExample.jl but in the form of a pluto notebook for ease of readibility.
+This project consists of R files and julia files all in the src folder.
+1. Blassosim.jl - contains code to run the simulations of the Blasso example
+2. MHsim.jl - contains code to run simulations of Metropolis-Hastings examples
+3. Testsmoments.jl - Contains code to run the AR(1) simulations.
+4. pmfestimationex.jl - contains code to run the pmf estimation simulations.
 
 # Running a given file
 
@@ -51,6 +35,8 @@ Once you have activated the project environment and have the required dependenci
 $julia julia/filename.jl
 ```
 
+Note that in the case of the simulation examples, all except the Metropolis-Hastings example expect an input in the command line to know which chain/sample the estimation procedure should be run on.
+Specifically Blassosim.jl expects a number between 1-9, Testmoments.jl 1-5, pmfestimationex.jl 1-4. 
 ## Running a pluto notebook
 
 To run the pluto notebooks execute the following code:
