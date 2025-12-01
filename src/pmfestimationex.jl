@@ -1,6 +1,7 @@
 include("mixingMeasure.jl")
 using RCall
 R"library(momentLS)"
+R"measlist = vector('list', length = 50)"
 Random.seed!(1234);
 alphas = rand(10)
 function sim_data(n, option)::AbstractArray{Integer}
@@ -118,6 +119,7 @@ for j in 1:50
     else
             errors[j] = sum((pmf.(x) .- pmft4.(x)).^2) 
     end
+    @rput j
     @rput supp
     @rput weight
     @rput r
@@ -125,10 +127,11 @@ for j in 1:50
     @rget err
     oerrors[j] = err
     println(errors[j], oerrors[j])
+    R"measlist[[j]] = cbind(supp, weight)"
 end
 
-
-
+@rput i
+R"saveRDS(measlist, paste(i, 'pmfmeas.rds', sep = ''))"
 
 
 open(string("gridlesspmf",ARGS[1], ".txt"), "w") do io
