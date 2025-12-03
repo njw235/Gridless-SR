@@ -16,7 +16,7 @@ end
 
 
 grad_optimize = function(r,p, weight_option, supp, weight,delta)
-	if(weight_option = "unweighted")
+	if(weight_option == "unweighted")
 		gradients = zeros(26)
 		supports = zeros(26)
 	else
