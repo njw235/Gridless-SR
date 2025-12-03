@@ -47,11 +47,10 @@ for j in 1:50
 	@rget errorp
 	errorps[j] = errorp
 	Terrorsp = terr
-	measure = hcat(supp, weight)
-	println(measure)
-	global ms = vcat(ms, measure)
+	R"measlist[[j]] = cbind(supp,weight)"
 end
 
+R"saveRDS(measlist, paste(i, 'AR.rds', sep = ''))"
 @rget rh
 println(Terrorsp)
 
@@ -78,7 +77,6 @@ open(string("MCMCout",ARGS[1],".txt"), "w") do io
     println(io, error4)
     println(io, errorps)
     println(io,rh)
-    println(io, ms)
     println(io, Terrorsp)
 end
 #N = 6 .^[2:1:5;]
