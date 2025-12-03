@@ -1,4 +1,4 @@
-include("momentLS.jl")
+include("SR1.jl")
 R"library(momentLS)"
 
 errorps = zeros(50)
@@ -7,7 +7,7 @@ error2 = zeros(50)
 error3 = zeros(50)
 error4 = zeros(50)
 Terrorsp = zeros(50)
-ms = Matrix{Float64}
+R"measlist = vector('list', 50)"
 
 R"set.seed(1234)"
 R"rho = c(runif(1, -0.9, -0.7), runif(1, -0.6, -0.4), runif(1, -0.2, 0.2), runif(1, 0.4, 0.6), runif(1, 0.7, 0.9))"
@@ -20,7 +20,7 @@ for j in 1:50
     R"dhat = tune_delta(x,5)$delta*0.8"
     @rget r
     @rget dhat
-    m = momentLSmod(r, dhat, [0.0],[0.0], 1e-9)
+    m = SR1_gridless(r, dhat,"unweighted", [0.0],[0.0], 1e-9)
     supp = m[1]
 	weight = m[2]
     @rput supp
