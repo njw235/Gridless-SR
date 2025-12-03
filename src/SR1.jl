@@ -265,7 +265,7 @@ SR1_gridless = function(r, delta, weight_option,supp, weight, tol, graph = false
 		
 	else
 		id = [1:1:13;]
-		dictionary = Dict(id .=> [estimate_poly(i,r,x) for i in [1:1:13;]])
+		dictionary = Dict(id .=> [estimate_poly(i,r) for i in [1:1:13;]])
 		pts = [0:0.01:1-delta;]
 	end
 	n = length(r)
