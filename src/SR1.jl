@@ -26,7 +26,7 @@ grad_optimize = function(r,p, weight_option, supp, weight,delta)
 	solver = Clarabel.Optimizer
 	
 	n = -Int(floor(log2(delta)))
-	for ind in zip([1:1:2*n;],append!([1:1:n;], [-n:1:-1;]))
+	for ind in (weight_option == "unweighted" ? zip([1:1:2*n;],append!([1:1:n;], [-n:1:-1;])) : zip([1:1:n;],[1:1:n;]))
 		#trying with replacing alpha with x
 		model = SOSModel(solver)
         set_string_names_on_creation(model, false)
