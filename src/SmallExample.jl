@@ -1,4 +1,4 @@
-include("momentLS.jl")
+include("SR1.jl")
 R"library(momentLS)"
 # Initialize a moment sequence supported by a single atom
 
@@ -12,7 +12,7 @@ y = weight .* atom .^[0:1:n-1;]
 
 dhat = 1-atom -0.05
 
-m = momentLSmod(y, dhat, [0.0],[0.0], 1e-8)
+m = SR1_gridless(y, dhat, "unweighted", [0.0],[0.0], 1e-8)
 
 @rput y
 
@@ -29,4 +29,5 @@ R"diff = L2diff_L2Moment(y, supp, w)"
 
 println("The estimated support is: ", supp, " The estimated weights are: ", w)
 println("The true support is: ", atom, " The true weight is: ", weight)
+
 println("The loss function value for our estimator is: ", diff)
