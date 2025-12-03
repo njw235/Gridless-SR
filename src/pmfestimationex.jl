@@ -1,4 +1,4 @@
-include("mixingMeasure.jl")
+include("SR1.jl")
 using RCall
 R"library(momentLS)"
 R"measlist = vector('list', length = 50)"
@@ -64,28 +64,6 @@ function pmft1(x)
     (1/3)*0.8*0.2^x + (2/3)*0.6*0.4^x
 end
 
-R"momentNorm = function(support, weights) {
-aat = outer(support, support)
-norm2 = sum(1/(1-aat) * outer(weights, weights))
-return(norm2)
-}"
-
-
-R"innerProduct = function(s1, w1, s2, w2){
-aat = outer(s1, s2)
-ip = sum(1/(1-aat) * outer(w1,w2))
-return(ip)
-}"
-
-R"twomomentdiff = function(s1, w1, s2,w2){
-val = momentNorm(s1, w1) + momentNorm(s2,w2) - 2*innerProduct(s1,w1,s2,w2)
-return(val)
-}"
-
-
-
-
-
 N = 1000
 errors = zeros(50)
 oerrors = zeros(50)
@@ -103,7 +81,7 @@ for j in 1:50
     end
     supp = [0.1]
     weight = [0.5]
-    m = mixingmeasure(r, d, supp, weight, 3e-8)
+    m = SR1_gridless(r, d, "weighted", supp, weight, 3e-8)
     supp = m[1]
     weight = m[2]
     function pmf(x)
