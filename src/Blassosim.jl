@@ -1,4 +1,4 @@
-include("momentLS.jl")
+include("SR1.jl")
 R"load('MC_chains.Rdata')"
 R"library(momentLS)"
 R"print(getwd())"
@@ -14,7 +14,7 @@ for j in 1:50
     R"dhat = tune_delta(ch_blasso$x[,as.integer(i)],5)$delta*0.8"
     @rget r
     @rget dhat
-    m = momentLSmod(r, dhat, [0.0], [0.0], 1e-9)
+    m = SR1_gridless(r, dhat,"unweighted", [0.0], [0.0], 1e-9)
     supp = m[1]
     weight = m[2]
     @rput supp
