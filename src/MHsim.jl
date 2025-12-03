@@ -4,7 +4,7 @@ R"library(momentLS)"
 R"source('simulateMH.R')"
 errors = zeros(51)
 terrors = zeros(51)
-measures = Matrix{Float64}
+R"measlist = vector('list', length = 50)"
 R"set.seed(1234)"
 R"g = matrix(rnorm(50), ncol = 1)"
 R"discreteMC = simulate_discreteMC(nStates=50)"
@@ -29,15 +29,12 @@ for j in 1:51
     @rget err
     errors[j] = err
     terrors[j] = terr
-    measure = hcat(supp, weight)
-	println(measure)
-	global measures = vcat(measures, measure)
+    R"measlist[[j]] = cbind(supp, weight)"
 end
-
+R"saveRDS(measlist, 'MHmeas.RDS')"
 println(terrors)
 
 open("MH.txt", "w") do io
     println(io, errors)
-    println(io, measures)
     println(io, terrors)
 end
