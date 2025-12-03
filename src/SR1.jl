@@ -39,7 +39,7 @@ grad_optimize = function(r,p, weight_option, supp, weight,delta)
 					g = g* (1 - transform(x,ind[2])*supp[j])
 				end
 			end
-			f = weight_option == "gridless" ? f + weight[i]*(1 + transform(x, ind[2])*supp[i])*g : f = f + weight[i]*g
+			f = weight_option == "unweighted" ? f + weight[i]*(1 + transform(x, ind[2])*supp[i])*g : f = f + weight[i]*g
 		end
 		d = prod((1 .- transform(x,ind[2]).*supp))
 	
