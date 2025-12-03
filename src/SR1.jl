@@ -46,7 +46,7 @@ grad_optimize = function(r,p, weight_option, supp, weight,delta)
 		if(weight_option == "unweighted")
 			h = f + (-2 * sum(p[ind[2]][1] .* x.^[0:1:p[ind[2]][3]-1;]) + r[1])*d
 		else
-			h = (f - (p[ind[2]][1] .*x.^[0:1:p[ind[2]][3]-1;])*d)*(1-transform(x,ind[2]))
+			h = (f - sum(p[ind[2]][1] .*x.^[0:1:p[ind[2]][3]-1;])*d)*(1-transform(x,ind[2]))
 		end
 		if abs(ind[2]) == n
 			S = @set x>= 2^(abs(n)) * delta - 1 && 1-x >= 0
