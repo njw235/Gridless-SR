@@ -317,6 +317,8 @@ SR1_gridless = function(r, delta, weight_option, V, method, maxit,init_supp, ini
             println("failed to cvg")
         end
     end
+	pop!(supp)
+	pop!(weight)
 	return(supp, weight)
 end
 
