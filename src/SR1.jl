@@ -15,13 +15,14 @@ transform = function(x,i)
 end
 
 
-grad_optimize = function(r,p, weight_option, supp, weight,delta)
-	if(weight_option == "unweighted")
-		gradients = zeros(26)
-		supports = zeros(26)
+grad_optimize = function(r,p, weight_option,V, supp, weight,delta)
+    J = Int(ceil(log2(length(r))))
+	if(V == "Z")
+		gradients = zeros(2*J)
+		supports = zeros(2*J)
 	else
-		gradients = zeros(13)
-		supports = zeros(13)
+		gradients = zeros(J)
+		supports = zeros(J)
 	end
 	solver = Clarabel.Optimizer
 	
@@ -45,8 +46,10 @@ grad_optimize = function(r,p, weight_option, supp, weight,delta)
 	
 		if(weight_option == "unweighted")
 			h = f + (-2 * sum(p[ind[2]][1] .* x.^[0:1:p[ind[2]][3]-1;]) + r[1])*d
-		else
+        elseif(ind[2] > 0)
 			h = (f - sum(p[ind[2]][1] .*x.^[0:1:p[ind[2]][3]-1;])*d)*(1-transform(x,ind[2]))
+        else
+            h = (f - sum(p[ind[2]][1] .*x.^[0:1:p[ind[2]][3]-1;])*d)*(1+transform(x,ind[2]))
 		end
 		if abs(ind[2]) == n
 			S = @set x>= 2^(abs(n)) * delta - 1 && 1-x >= 0
@@ -257,55 +260,63 @@ end
 
 
 
-SR1_gridless = function(r, delta, weight_option,supp, weight, tol, graph = false)
-	if(weight_option == "unweighted")
-		id = append!([1:1:13;], [-13:1:-1;])
-		dictionary = Dict(id .=> [estimate_poly(i,r) for i = append!([1:1:13;],[-13:1:-1;])])
-		pts = [-1+delta:0.01:1-delta;]
-		
-	else
-		id = [1:1:13;]
-		dictionary = Dict(id .=> [estimate_poly(i,r) for i in [1:1:13;]])
-		pts = [0:0.01:1-delta;]
-	end
-	n = length(r)
-	exponents = [0:1:n-1;]
-	conv = false
-	eftol = 6*tol*sum(abs.(r))
-	count = 0
-	while(count < 125 && !conv)
-		SRstep = SR(supp, weight,r)
-		supp = SRstep[1]
-		weight = SRstep[2]
-		#println(supp, weight)
-		
-		points = grad_optimize(r, dictionary, weight_option, supp, weight,delta)
-		index = findmin(points[1])[2]
-		if(findmin(points[1])[1] > -eftol)
-			conv = true
-		end
-		append!(supp, points[2][index])
-		append!(weight, 0)
-		if(graph == true)
-            a = zeros(length(pts))
-            b = zeros(length(pts))
-            for i in 1:length(a)
-                a[i] = -2*sum(r.* pts[i].^exponents) + r[1]
-                b[i] = sum(weight.*(1 .+ pts[i].*supp)./(1 .- pts[i].*supp))
-            end
-            val = a+b
-            if(count == 1)
-                display(plot(pts, val))
-            else
-                display(plot!(pts,val))
-            end
-        end
+SR1_gridless = function(r, delta, weight_option, V, method, maxit,init_supp, init_weight, tol, graph = false)
+	if(method == "exact")
+        supp, weight = momentLS(-1 + delta, 1-delta, r, tol)
+    else
+        n = Int(ceil(log2(length(r))))
+        if(V == "Z")
+            id = append!([1:1:n;], [-n:1:-1;])
+            dictionary = Dict(id .=> [estimate_poly(i,r) for i = append!([1:1:n;],[-n:1:-1;])])
+            pts = [-1+delta:0.01:1-delta;]
             
-		count = count + 1
-	end
-	if(!conv)
-	    println("failed to cvg")
-	end
+        else
+            id = [1:1:n;]
+            dictionary = Dict(id .=> [estimate_poly(i,r) for i in [1:1:n;]])
+            pts = [0:0.01:1-delta;]
+        end
+        
+        exponents = [0:1:n-1;]
+        supp = init_supp
+        weight = init_weight
+        conv = false
+        eftol = 6*tol*sum(abs.(r))
+        count = 0
+        while(count < maxit && !conv)
+            SRstep = SR(supp, weight,r)
+            supp = SRstep[1]
+            weight = SRstep[2]
+            #println(supp, weight)
+            
+            points = grad_optimize(r, dictionary, weight_option,V, supp, weight,delta)
+            index = findmin(points[1])[2]
+            if(findmin(points[1])[1] > -eftol)
+                conv = true
+            end
+            append!(supp, points[2][index])
+            append!(weight, 0)
+            if(graph == true)
+                a = zeros(length(pts))
+                b = zeros(length(pts))
+                for i in 1:length(a)
+                    a[i] = -2*sum(r.* pts[i].^exponents) + r[1]
+                    b[i] = sum(weight.*(1 .+ pts[i].*supp)./(1 .- pts[i].*supp))
+                end
+                val = a+b
+                if(count == 1)
+                    display(plot(pts, val))
+                else
+                    display(plot!(pts,val))
+                end
+            end
+                
+            count = count + 1
+        end
+        println(count)
+        if(!conv)
+            println("failed to cvg")
+        end
+    end
 	return(supp, weight)
 end
 
