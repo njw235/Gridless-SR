@@ -14,6 +14,15 @@ transform = function(x,i)
 	return(sign(i)*((1+x)*(1-2.0^-abs(i)) - x))
 end
 
+Empirical = function(x)
+    
+    n = length(x)
+    supp = [0:1:findmax(x)[1];]
+    count = proportions(x)
+    
+    return(count)
+
+end
 
 grad_optimize = function(r,p, weight_option,V, supp, weight,delta)
     J = Int(ceil(log2(length(r))))
