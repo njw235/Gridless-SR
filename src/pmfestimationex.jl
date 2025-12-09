@@ -81,7 +81,7 @@ for j in 1:50
     end
     supp = [0.1]
     weight = [0.5]
-    m = SR1_gridless(r, d, "weighted", supp, weight, 3e-8)
+    m = SR1_gridless(r, d,"weighted", "N", "LDA", 100, [0.0],[0.0], 1e-9)
     supp = m[1]
     weight = m[2]
     function pmf(x)
