@@ -20,7 +20,7 @@ for j in 1:50
     R"dhat = tune_delta(x,5)$delta*0.8"
     @rget r
     @rget dhat
-    m = SR1_gridless(r, dhat,"unweighted", [0.0],[0.0], 1e-9)
+    m = SR1_gridless(r, dhat,"unweighted", "Z", "LDA", 100, [0.0],[0.0], 1e-9)
     supp = m[1]
 	weight = m[2]
     @rput supp
