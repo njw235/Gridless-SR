@@ -65,8 +65,9 @@ grad_optimize = function(r,p, weight_option,V, supp, weight,delta)
 			
 			
 		v = moment_matrix(model[:c])
-		algebraic_solver = SemialgebraicSetsHCSolver(; excess_residual_tol = 1e-1, real_tol = 1e-1, compile = false)
-		pt = atomic_measure(v, FixedRank(1), Echelon(), algebraic_solver)
+		#algebraic_solver = SemialgebraicSetsHCSolver(; excess_residual_tol = 1e-1, real_tol = 1e-1, compile = false)
+		#pt = atomic_measure(v, FixedRank(1), Echelon(), algebraic_solver)
+		pt = atomic_measure(v, FixedRank(1))
 		if(typeof(pt) != Nothing)
 			if(length(pt.atoms[1].center) == 1)
 				supports[ind[1]] = transform(pt.atoms[1].center[1],ind[2])
