@@ -300,8 +300,13 @@ SR1_gridless = function(r, delta, weight_option, V, method, maxit,init_supp, ini
                 a = zeros(length(pts))
                 b = zeros(length(pts))
                 for i in 1:length(a)
-                    a[i] = -2*sum(r.* pts[i].^exponents) + r[1]
-                    b[i] = sum(weight.*(1 .+ pts[i].*supp)./(1 .- pts[i].*supp))
+                   if(V = "Z")
+                        a[i] = -2*sum(r.* pts[i].^exponents) + r[1]
+                        b[i] = sum(weight.*(1 .+ pts[i].*supp)./(1 .- pts[i].*supp))
+                    else
+                        a[i] = -sum(r.* pts[i].^exponents)
+                        b[i] = sum(weight./(1 .- pts[i].*supp))
+                    end
                 end
                 val = a+b
                 if(count == 1)
