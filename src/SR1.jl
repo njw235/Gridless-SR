@@ -8,12 +8,17 @@ using LinearAlgebra
 using LinearSolve
 using Plots
 using HomotopyContinuation
+using StatsBase
 
-
+# Maps a value x in [0,1] to a value in a specific interval determined by index i.
+# The transformation uses dyadic intervals based on powers of 2.
+# Positive indices map to positive intervals, negative indices to negative intervals.
 transform = function(x,i)
 	return(sign(i)*((1+x)*(1-2.0^-abs(i)) - x))
 end
 
+# Computes the empirical probability mass function (PMF) from a sequence of discrete values.
+# Returns the proportion of each value from 0 to the maximum observed value.
 Empirical = function(x)
     
     n = length(x)
@@ -24,6 +29,17 @@ Empirical = function(x)
 
 end
 
+# Performs the gradient optimization step of the gridless Sums of Squares (SOS) relaxation algorithm.
+# Finds optimal support points by solving semidefinite programs over transformed intervals.
+# Parameters:
+#   - r: input sequence
+#   - p: polynomial dictionary mapping indices to polynomial coefficients
+#   - weight_option: "unweighted" or weighted optimization mode
+#   - V: "Z" for symmetric support on [-1,1], otherwise [0,1]
+#   - supp: current support points
+#   - weight: current weights
+#   - delta: precision parameter for interval bounds
+# Returns: (gradients, supports) where gradients are objective values and supports are optimal points
 grad_optimize = function(r,p, weight_option,V, supp, weight,delta)
     J = Int(ceil(log2(length(r))))
 	if(V == "Z")
@@ -93,6 +109,14 @@ grad_optimize = function(r,p, weight_option,V, supp, weight,delta)
 	end
 	return(gradients, supports)
 end
+
+# Solves the moment problem using least squares with iterative support point addition.
+# Uses SOS programming to find optimal support points that match the given moment sequence.
+# Parameters:
+#   - a, b: lower and upper bounds of the support interval
+#   - r: input sequence to match
+#   - tol: convergence tolerance
+# Returns: (support points, weights, history of added points)
 momentLS = function(a, b, r, tol)
 	pts = []
 	solver = Clarabel.Optimizer
@@ -193,7 +217,13 @@ momentLS = function(a, b, r, tol)
 	return(supp, weight,pts)
 end
 
-
+# Performs a single Support Reduction (SR) step by solving for optimal weights given support points.
+# Ensures non-negative weights by iteratively removing support points with negative weights.
+# Parameters:
+#   - supp: current support points
+#   - weight: current weights
+#   - r: input sequence
+# Returns: (updated support, updated weights)
 SR = function(supp, weight,r)
 		validmeasure = false
 		current = weight
@@ -233,7 +263,13 @@ SR = function(supp, weight,r)
 	return(supp, weight)
 end
 
-
+# Estimates polynomial coefficients for a specific dyadic interval transformation.
+# Uses binomial expansion to compute coefficients that approximate the moment sequence
+# over the transformed interval.
+# Parameters:
+#   - i: interval index (positive or negative)
+#   - r: moment sequence
+# Returns: (polynomial coefficients, interval base point, polynomial degree)
 estimate_poly = function(i,r)
 	m = Int(ceil(exp(1+1/exp(1))*log(10^7)))
 	t = Int(floor(2^abs(i) * log(10^7)))
@@ -251,17 +287,11 @@ estimate_poly = function(i,r)
 	return(b,a0,up)
 end
 
-
-
-plot_poly = function(s)
-	@polyvar x 
-	exponents = [0:1:s[3]-1;]
-	p = sum(s[1] .* (x - s[2]).^exponents)
-	points = [0:0.01:0.5;]
-	plot(points, p.(points))
-end
-
-
+# Evaluates a polynomial at a given point x.
+# Parameters:
+#   - s: tuple of (coefficients, base point, degree)
+#   - x: evaluation point
+# Returns: polynomial value at x
 estim_poly = function(s,x)
 	exponents = [0:1:s[3]-1;]
 	return sum(s[1] .* (x-s[2]).^exponents)
@@ -269,7 +299,21 @@ end
 
 
 
-
+# Main gridless Support Reduction algorithm (SR1) for solving the moment problem.
+# Iteratively adds support points by solving SOS optimization problems over multiple intervals
+# until convergence or maximum iterations reached.
+# Parameters:
+#   - r: input sequence to match
+#   - delta: precision parameter for interval bounds
+#   - weight_option: "unweighted" or weighted mode
+#   - V: "Z" for [-1,1] support, otherwise [0,1]
+#   - method: "exact" for using full input sequence based polynomial, otherwise uses polynomial approximations
+#   - maxit: maximum number of iterations
+#   - init_supp: initial support points
+#   - init_weight: initial weights
+#   - tol: convergence tolerance
+#   - graph: if true, plots convergence progress
+# Returns: (final support points, final weights)
 SR1_gridless = function(r, delta, weight_option, V, method, maxit,init_supp, init_weight, tol, graph = false)
 	if(method == "exact")
         supp, weight = momentLS(-1 + delta, 1-delta, r, tol)
