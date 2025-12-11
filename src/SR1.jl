@@ -315,7 +315,7 @@ end
 #   - graph: if true, plots convergence progress
 # Returns: (final support points, final weights)
 SR1_gridless = function(r, delta, weight_option, V, method, maxit,init_supp, init_weight, tol, graph = false)
-	if(weight_option = "unweighted" && delta < 10e-12)
+	if(weight_option == "unweighted" && delta < 10e-12)
 		throw(ArgumentError("Delta is too small to use the unweighted SR algorithm"))
 	end
 	if(method == "exact")
